@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FromCard from './compoents/FromCard';
 import ToCard from './compoents/ToCard';
+import Image from 'next/image';
 
 
 const Page = () => {
   const [inputText, setInputText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('ko');
 
   const handleTranslate = async () => {
     if (!inputText) {
@@ -24,7 +26,7 @@ const Page = () => {
         },
         body: JSON.stringify({
           inputText,
-          selectedLanguage: 'en',  // 번역할 언어
+          selectedLanguage,  // 번역할 언어
         }),
       });
 
@@ -41,20 +43,32 @@ const Page = () => {
     }
   };
 
+  useEffect(() => {
+    handleTranslate()
+  }, [selectedLanguage]);
+
   return (
     <div className='flex bg-black min-h-screen flex-col items-center pt-10'>
-      <h1 className='text-6xl mt-10 font-bold'>Goats <span className='text-[#f67216]'>Speak</span></h1>
-      <div className='mt-20 w-full flex flex-col md:flex-row items-center justify-center gap-20'>
-        <FromCard placeholder='번역할 내용을 입력해주세요.' onTextChange={setInputText} />
-        <ToCard translatedText={translatedText} />
+      <div className='mt-10 flex items-center gap-4'>
+        <h1 className='text-6xl font-bold'>Goats <span className='text-[#f67216]'>Speak</span></h1>
+        <Image src="/goatius.png" width={60} height={60} alt='염소 로고'/>
       </div>
-      <button
-        className='mt-4 p-2 bg-blue-500 text-white rounded'
-        onClick={handleTranslate}
-        disabled={loading}
-      >
-        {loading ? '번역 중...' : '번역하기'}
-      </button>
+
+      <div className='mt-20 w-full flex flex-col md:flex-row items-center justify-center gap-20'>
+        <FromCard
+            handleTranslate={handleTranslate}
+            loading={loading}
+            placeholder='번역할 내용을 입력해주세요.'
+            onTextChange={setInputText}
+        />
+
+        <ToCard
+          selectedLanguage={selectedLanguage}
+          setSelectedLanguage={setSelectedLanguage}
+          translatedText={translatedText} 
+          />
+      </div>
+
     </div>
   );
 };
