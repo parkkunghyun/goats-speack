@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { MdContentCopy } from "react-icons/md";
 import { GiSpeaker } from "react-icons/gi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   placeholder?: string;
@@ -41,6 +43,27 @@ const FromCard = ({handleTranslate, loading, placeholder = "", onTextChange }: P
       console.error('TTS 오류:', error);
     }
   };
+
+  const handleCopyToClipboard = () => {
+      if (!inputText) return;
+  
+      navigator.clipboard.writeText(inputText)
+        .then(() => {
+          toast.success("📋 번역된 텍스트가 복사되었습니다!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          });
+        })
+        .catch((err) => {
+          console.error("복사 실패:", err);
+          toast.error("❌ 복사에 실패했습니다.");
+        });
+    };
   
 
 
@@ -58,7 +81,7 @@ const FromCard = ({handleTranslate, loading, placeholder = "", onTextChange }: P
       <div className='h-[40px] border-t border-gray-500 flex items-center justify-between'>
         <div className='flex items-center gap-4 ml-4'>
           <GiSpeaker onClick={handleTextToSpeech} className='text-4xl hover:scale-110 cursor-pointer'/>
-          <MdContentCopy className='text-2xl hover:scale-110 cursor-pointer'/>
+          <MdContentCopy onClick={handleCopyToClipboard} className='text-2xl hover:scale-110 cursor-pointer'/>
         </div>
         <button onClick={handleTranslate}
           className='bg-white h-full p-2 rounded text-black cursor-pointer'>
