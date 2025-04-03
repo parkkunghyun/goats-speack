@@ -46,7 +46,6 @@ const FromCard = ({handleTranslate, loading, placeholder = "", onTextChange }: P
 
   const handleCopyToClipboard = () => {
       if (!inputText) return;
-  
       navigator.clipboard.writeText(inputText)
         .then(() => {
           toast.success("📋 번역된 텍스트가 복사되었습니다!", {
