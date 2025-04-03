@@ -16,7 +16,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
         with:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          project_id: python-gcp-422006
+          project_id: gcp-project-452602
 
       - name: Configure Docker
         run: gcloud auth configure-docker
